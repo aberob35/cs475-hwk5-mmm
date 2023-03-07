@@ -20,14 +20,14 @@ int main(int argc, char *argv[]) {
 	double timeHold = 0;
 	double timeHold2 = 0;
 
-	if(strcmp(argv[0],"./mmm") == 0 && argv[1] != NULL && argv[2] != NULL && argv[4] == NULL){
+	if(strcmp(argv[0],"./mmm") == 0 && argv[1] != NULL && argv[2] != NULL){
 		//check for which mode to run and then run it 
 		char* numCheck = argv[2];
 		char* numCheck2 = " ";
 		if(argv[3] != NULL){
 		  numCheck2 = argv[3];
 		}
-		if(strcmp(argv[1], "S") == 0 && isdigit(numCheck[0])){
+		if(strcmp(argv[1], "S") == 0 && isdigit(numCheck[0]) && argv[3] == NULL){
 			//get necessary information from command line
 			maxSize = atoi(argv[2]);
 			//run first time but do not time as we want to time last 3
@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 			printf("======== \n");
 			printf("Sequential Time (avg of 3 runs): %.6f\n", timeHold/3);
 
-		}else if(strcmp(argv[1], "P") == 0 && argv[2] < argv[3] && argv[2] != NULL && argv[3] != NULL && isdigit(numCheck[0]) && isdigit(numCheck2[0])){
+		}else if(strcmp(argv[1], "P") == 0 && argv[2] < argv[3] && argv[2] != NULL && argv[3] != NULL && isdigit(numCheck[0]) && isdigit(numCheck2[0])  && argv[4] == NULL){
 			//getting needed variables
 			threadNum = atoi(argv[2]);
 			maxSize = atoi(argv[3]);
