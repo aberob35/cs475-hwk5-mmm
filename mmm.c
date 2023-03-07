@@ -10,7 +10,39 @@
  * the input matrices with random integers from 0 to 99
  */
 void mmm_init() {
-	// TODO
+	//variables for random numbers
+	srand(time(NULL));
+	double randNum;
+
+	// Allocating space for array and its contents
+	matrix1 = (double**) malloc(sizeof(double*) * maxSize);
+	matrix2 = (double**) malloc(sizeof(double*) * maxSize);
+	matrix3 = (double**) malloc(sizeof(double*) * maxSize);
+	matrix4 = (double**) malloc(sizeof(double*) * maxSize);
+
+	//matrix4 = (double**) malloc(sizeof(double*) * maxSize);
+	for(int i = 0; i < maxSize; i++){
+		matrix1[i] = (double*) malloc(sizeof(double) * maxSize);//One of 2 matrices to get multiplied
+		matrix2[i] = (double*) malloc(sizeof(double) * maxSize);//One of 2 matrices to get multiplied
+		matrix3[i] = (double*) malloc(sizeof(double) * maxSize);//Products of multiplied matrices stored here
+		matrix4[i] = (double*) malloc(sizeof(double) * maxSize);//Products of parallel matrices are here
+	}
+
+	//fill up matrix 1
+	for(int i = 0; i < maxSize; i++){
+		for(int j = 0; j < maxSize; j++){
+			randNum = (double) rand()/ RAND_MAX * 99;
+			matrix1[i][j] = randNum;
+		}
+	}
+
+	// fill up matrix 2
+	for(int i = 0; i < maxSize; i++){
+		for(int j = 0; j < maxSize; j++){
+			randNum = (double) rand()/ RAND_MAX * 99;
+			matrix2[i][j] = randNum;
+		}
+	}
 }
 
 /**
@@ -18,14 +50,34 @@ void mmm_init() {
  * @param matrix pointer to a 2D array
  */
 void mmm_reset(double **matrix) {
-	// TODO
+	// TODO 
+	for (int i = 0; i < maxSize; i++) {
+        for (int j = 0; j < maxSize; j++) {
+            matrix[i][j] = 0;
+        }
+    }
 }
+
 
 /**
  * Free up memory allocated to all matrices
  */
 void mmm_freeup() {
 	// TODO
+	for(int i = 0; i < maxSize; i++){
+		free(matrix1[i]);
+		matrix1[i] = NULL;
+		free(matrix2[i]);
+		matrix1[i] = NULL;
+		free(matrix3[i]);
+		matrix1[i] = NULL;
+	}
+	free(matrix1);
+	matrix1 = NULL;
+	free(matrix2);
+	matrix2 = NULL;
+	free(matrix3);
+	matrix3 = NULL;
 }
 
 /**
@@ -33,13 +85,29 @@ void mmm_freeup() {
  */
 void mmm_seq() {
 	// TODO - code to perform sequential MMM
+	for(int i =0; i < maxSize; i++){
+		for(int j = 0; j < maxSize; j++){
+			for(int k = 0; k < maxSize; k++){
+				matrix3[i][j] += matrix1[i][k] * matrix2[k][j];
+			}
+		}
+	}
 }
 
 /**
  * Parallel MMM
  */
 void *mmm_par(void *args) {
-	// TODO - code to perform parallel MMM
+	thread_args *data = (thread_args*)args; // the structure that holds our data
+   //Row multiplied by column
+   for(int i = data->begin; i < data->end; i++){
+		for(int j = 0; j < maxSize; j++){
+			for(int k = 0; k < maxSize; k++){
+				matrix4[i][j] += matrix1[i][k] * matrix2[k][j];
+			}
+		}
+	}
+	return NULL;
 }
 
 /**
@@ -51,5 +119,16 @@ void *mmm_par(void *args) {
  */
 double mmm_verify() {
 	// TODO
-	return -1;
+	double maxDiff = 0;
+	for (int i = 0; i < maxSize; i++) {
+        for (int j = 0; j < maxSize; j++) {
+			double tempDiff = fabs((matrix3[i][j] - matrix4[i][j]));
+            if(tempDiff > maxDiff ){
+					maxDiff = tempDiff;
+			}
+        }
+    }
+	return maxDiff;
 }
+
+
