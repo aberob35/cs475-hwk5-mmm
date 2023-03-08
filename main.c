@@ -137,7 +137,7 @@ int main(int argc, char *argv[]) {
 			timeHold2 += (clockend - clockstart);
 			mmm_reset(matrix1);
 			mmm_reset(matrix2);
-			mmm_reset(matrix3);
+			mmm_reset(matrix4);
 			}
 			
 			//Verify step
