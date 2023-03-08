@@ -68,9 +68,11 @@ void mmm_freeup() {
 		free(matrix1[i]);
 		matrix1[i] = NULL;
 		free(matrix2[i]);
-		matrix1[i] = NULL;
+		matrix2[i] = NULL;
 		free(matrix3[i]);
-		matrix1[i] = NULL;
+		matrix3[i] = NULL;
+		free(matrix4[i]);
+		matrix4[i] = NULL;
 	}
 	free(matrix1);
 	matrix1 = NULL;
@@ -78,6 +80,8 @@ void mmm_freeup() {
 	matrix2 = NULL;
 	free(matrix3);
 	matrix3 = NULL;
+	free(matrix4);
+	matrix4 = NULL;
 }
 
 /**
